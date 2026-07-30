@@ -10,9 +10,8 @@ extern lv_obj_t* page_menu;
 static int i=0;
 static lv_obj_t * page_pic ;
 static lv_obj_t * image ;
-#define IMG_MAX_NUM (sizeof(pics)/sizeof(pics[0]))
-
-void album(void);
+static int build_pic=0;
+#define IMG_MAX (sizeof(pics)/sizeof(pics[0]))
 
 char* pics[]= {
     "A:/workpace/pic/1.bmp",
@@ -22,24 +21,82 @@ char* pics[]= {
     "A:/workpace/pic/5.bmp",
     };
 
+/* ── 记录按下坐标 ── */
+static int start_x = 0, start_y = 0;
+
+static void on_press(lv_event_t *e)
+{
+    lv_indev_t *indev = lv_indev_active();
+    lv_point_t p;
+    lv_indev_get_point(indev, &p);
+    start_x = p.x;
+    start_y = p.y;
+    printf("press at %d, %d\n", start_x, start_y);
+}
+
+static void on_release(lv_event_t *e)
+{
+    lv_indev_t *indev = lv_indev_active();
+    lv_point_t p;
+    lv_indev_get_point(indev, &p);
+    int dx = p.x - start_x;
+    printf("release at %d, %d  dx=%d\n", p.x, p.y, dx);
+
+    if (dx < -50)
+        i = (i - 1 + IMG_MAX) % IMG_MAX;    // 右滑 → 上一张
+    else if (dx > 50)
+        i = (i + 1) % IMG_MAX;              // 左滑 → 下一张
+    else return;
+
+    lv_image_set_src(image, pics[i]);
+}
+
+/* ================================================================
+ *  构建总页面
+ * ================================================================ */
+void album(void)
+{
+    page_pic=lv_obj_create(lv_screen_active());
+    lv_obj_set_size(page_pic,1024,600);
+    lv_obj_set_align(page_pic,LV_ALIGN_CENTER);
+
+    page_flag=-1;
+    back_prev(page_pic);
+
+    /* 图片控件 */
+    image = lv_image_create(page_pic);
+    lv_image_set_src(image, pics[i]);
+    lv_obj_set_align(image, LV_ALIGN_CENTER);
+
+    /* ── 图片不参与触摸 ── */
+    lv_obj_add_flag(image, LV_OBJ_FLAG_EVENT_BUBBLE);   // 只冒泡，不 CLICKABLE
+
+    /* ── page_pic 收所有事件 ── */
+    lv_obj_add_flag(page_pic, LV_OBJ_FLAG_CLICKABLE);
+    lv_obj_set_style_bg_opa(page_pic, LV_OPA_COVER, 0);
+    lv_obj_add_event_cb(page_pic, on_press,   LV_EVENT_PRESSED, NULL);
+    lv_obj_add_event_cb(page_pic, on_release, LV_EVENT_RELEASED, NULL);
+}
+
+/* =======================================
+* 进入
+* ========================================*/
 static void pic_event_handle(lv_event_t* e)
 {
-    lv_event_code_t code=lv_event_get_code(e);
-    lv_obj_t* label_pic = lv_event_get_user_data(e);
-    if(code==LV_EVENT_PRESSED)
+    build_pic=0;
+    if(!build_pic)
     {
-        lv_obj_add_flag(page_menu, LV_OBJ_FLAG_HIDDEN);
         album();
+        build_pic=1;
     }
+    lv_obj_add_flag(page_menu, LV_OBJ_FLAG_HIDDEN);
+    lv_obj_remove_flag(page_pic, LV_OBJ_FLAG_HIDDEN);
 }
 
 // 相册图标
 void pic_icon(void)
 {
-    if(page_pic != NULL) 
-    {
-        lv_obj_add_flag(page_pic, LV_OBJ_FLAG_HIDDEN);
-    }
+     if(page_pic) lv_obj_add_flag(page_pic, LV_OBJ_FLAG_HIDDEN);
 
     lv_obj_t* btn_pic = lv_button_create(page_menu);
     lv_obj_set_size(btn_pic, 120, 120);
@@ -50,88 +107,7 @@ void pic_icon(void)
     lv_obj_set_parent(label_pic, lv_obj_get_parent(btn_pic)); // 移到同一父容器
     lv_obj_align_to(label_pic, btn_pic, LV_ALIGN_OUT_BOTTOM_MID, -20, 0);
     // lv_obj_set_align(label_pic, LV_ALIGN_OUT_BOTTOM_MID);
+    set_cn_font(label_pic);
 
-    static lv_style_t style1;
-    lv_style_init(&style1);
-    lv_style_set_text_font(&style1, &Ch_make);
-    lv_obj_add_style(label_pic, &style1, LV_STATE_DEFAULT);
-
-    lv_obj_add_event_cb(btn_pic, pic_event_handle, LV_EVENT_ALL, label_pic);
-}
-
-static void pacture_event(lv_event_t* e)
-{
-    lv_obj_t* label=lv_event_get_user_data(e);
-    char* str=lv_label_get_text(label);
-    if(strcmp(str, "上一张") == 0)
-    {
-        if(i>0)
-        {
-            i--;
-        }
-        else
-        i=IMG_MAX_NUM -1;
-    }
-    else if(strcmp(str, "下一张") == 0)
-    {
-        if(i<IMG_MAX_NUM -1)
-        {
-            i++;
-        }
-        else
-        i=0;
-    }
-
-    lv_image_set_src(image, pics[i]);
-
-    // if(strcmp(str,"退回")==0)
-    // {
-    //     lv_obj_add_flag(page_pic, LV_OBJ_FLAG_HIDDEN);
-    //     lv_obj_remove_flag(page_menu, LV_OBJ_FLAG_HIDDEN);
-    // }
-}
-
-// 相册
-void album(void)
-{
-    if(page_pic != NULL) 
-    {
-        lv_obj_delete(page_pic);   // 先删旧的
-    }
-
-    page_pic=lv_obj_create(lv_screen_active());
-    lv_obj_set_size(page_pic,1024,600);
-    lv_obj_set_align(page_pic,LV_ALIGN_CENTER);
-
-    static lv_style_t style;
-    lv_style_init(&style);
-    lv_style_set_text_font(&style, &Ch_make);
-    lv_style_set_text_color(&style, lv_color_hex(0xFF0000));
-
-    lv_obj_t* btn1 = lv_button_create(page_pic);
-    lv_obj_set_size(btn1, 160, 80);
-    lv_obj_set_align(btn1, LV_ALIGN_BOTTOM_LEFT);
-    lv_obj_t* label1 = lv_label_create(btn1);
-    lv_obj_set_align(label1, LV_ALIGN_CENTER);
-    lv_label_set_text(label1,"上一张");
-    lv_obj_add_style(label1, &style, LV_STATE_DEFAULT);
-    lv_obj_add_event_cb(btn1,pacture_event, LV_EVENT_CLICKED, label1);
-
-
-    lv_obj_t* btn2 = lv_button_create(page_pic);
-    lv_obj_set_size(btn2, 160, 80);
-    lv_obj_t* label2 = lv_label_create(btn2);
-    lv_obj_set_align(btn2, LV_ALIGN_BOTTOM_RIGHT);
-    lv_obj_set_align(label2, LV_ALIGN_CENTER);
-    lv_label_set_text(label2,"下一张");
-    lv_obj_add_style(label2, &style, LV_STATE_DEFAULT);
-    lv_obj_add_event_cb(btn2,pacture_event, LV_EVENT_CLICKED, label2);
-
-    page_flag=-1;
-    back_prev(page_pic);
-
-    //在活动屏幕上创建一个图片控件 --- 静态控件
-	image = lv_image_create(page_pic);
-	lv_image_set_src(image, pics[i]);
-    lv_obj_set_align(image, LV_ALIGN_CENTER);
+    lv_obj_add_event_cb(btn_pic, pic_event_handle, LV_EVENT_CLICKED, NULL);
 }

@@ -76,7 +76,7 @@ void back_prev(lv_obj_t* parent)
     lv_obj_add_event_cb(btn_back,back_event, LV_EVENT_CLICKED, label_back);
 }
 
-
+// 输入密码
 static void password_event(lv_event_t* e)
 {
     lv_event_code_t code=lv_event_get_code(e);
@@ -117,6 +117,7 @@ static void password_event(lv_event_t* e)
     }
 }
 
+// 登录
 void log_Init()
 {
     lv_obj_t* kb = lv_keyboard_create(lv_screen_active());
@@ -142,6 +143,7 @@ void log_Init()
 
 static lv_obj_t *label_Time = NULL;
 
+// 桌面时钟
 static void clock_timer_cb(lv_timer_t *t)
 {
     (void)t;

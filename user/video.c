@@ -29,6 +29,7 @@ static lv_obj_t  *content_panels[2];
 static lv_obj_t* tab_btns[2];
 static lv_obj_t* user_btn[3];
 static int current_tab= 0;
+static int built = 0;
 
 
 // 播放器文件
@@ -80,6 +81,7 @@ static void panel_sw(int tab)
 static void tab_cb_0(lv_event_t *e) { (void)e; panel_sw(0); }
 static void tab_cb_1(lv_event_t *e) { (void)e; panel_sw(1); }
 
+// 线程：播放音乐
 void* board_music(void* arg)
 {
     while(1)
@@ -150,6 +152,7 @@ static void progress_timer_cb(lv_timer_t *t)
     }
 }
 
+// 线程：锁定音乐播放
 void* tran_music(void* arg)
 {
     while(1)
@@ -303,8 +306,6 @@ void create_movie_panel(lv_obj_t* parent)
     }
 }
 
-
-
 /* ================================================================
  *  构建总页面
  * ================================================================ */
@@ -378,14 +379,13 @@ void build_page(void)
     panel_sw(0);
 }
 
-
 /* =======================================
 * 进入
 * ========================================*/
 static void entry_cb(lv_event_t* e)
 {
     (void)e;
-    static int built = 0;
+    built = 0;
 
     if (!built) 
     {
