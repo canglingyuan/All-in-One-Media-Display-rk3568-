@@ -13,6 +13,7 @@ set(CMAKE_DEPENDS_DEPENDENCY_FILES
   "/mnt/hgfs/share/All-in-One-Media-Display-rk3568-/user/clock.c" "CMakeFiles/main.dir/user/clock.c.o" "gcc" "CMakeFiles/main.dir/user/clock.c.o.d"
   "/mnt/hgfs/share/All-in-One-Media-Display-rk3568-/user/menu.c" "CMakeFiles/main.dir/user/menu.c.o" "gcc" "CMakeFiles/main.dir/user/menu.c.o.d"
   "/mnt/hgfs/share/All-in-One-Media-Display-rk3568-/user/pic.c" "CMakeFiles/main.dir/user/pic.c.o" "gcc" "CMakeFiles/main.dir/user/pic.c.o.d"
+  "/mnt/hgfs/share/All-in-One-Media-Display-rk3568-/user/video.c" "CMakeFiles/main.dir/user/video.c.o" "gcc" "CMakeFiles/main.dir/user/video.c.o.d"
   )
 
 # Targets to which this target links which contain Fortran sources.

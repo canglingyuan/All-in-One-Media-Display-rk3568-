@@ -359,6 +359,30 @@ user/pic.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/user/pic.c.s
 .PHONY : user/pic.c.s
 
+user/video.o: user/video.c.o
+.PHONY : user/video.o
+
+# target to build an object file
+user/video.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/user/video.c.o
+.PHONY : user/video.c.o
+
+user/video.i: user/video.c.i
+.PHONY : user/video.i
+
+# target to preprocess a source file
+user/video.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/user/video.c.i
+.PHONY : user/video.c.i
+
+user/video.s: user/video.c.s
+.PHONY : user/video.s
+
+# target to generate assembly for a file
+user/video.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/user/video.c.s
+.PHONY : user/video.c.s
+
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -392,6 +416,9 @@ help:
 	@echo "... user/pic.o"
 	@echo "... user/pic.i"
 	@echo "... user/pic.s"
+	@echo "... user/video.o"
+	@echo "... user/video.i"
+	@echo "... user/video.s"
 .PHONY : help
 
 

@@ -11,6 +11,8 @@ file(REMOVE_RECURSE
   "CMakeFiles/main.dir/user/menu.c.o.d"
   "CMakeFiles/main.dir/user/pic.c.o"
   "CMakeFiles/main.dir/user/pic.c.o.d"
+  "CMakeFiles/main.dir/user/video.c.o"
+  "CMakeFiles/main.dir/user/video.c.o.d"
 )
 
 # Per-language clean rules from dependency scanning.

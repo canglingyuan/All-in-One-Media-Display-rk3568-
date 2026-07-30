@@ -5,6 +5,7 @@
 
 extern lv_font_t Ch_make;
 extern int page_flag;
+extern lv_obj_t* page_menu;
 
 static int i=0;
 static lv_obj_t * page_pic ;
@@ -14,11 +15,11 @@ static lv_obj_t * image ;
 void album(void);
 
 char* pics[]= {
-    "A:/workpace/1.bmp",
-    "A:/workpace/2.bmp",
-    "A:/workpace/3.bmp",
-    "A:/workpace/4.bmp",
-    "A:/workpace/5.bmp",
+    "A:/workpace/pic/1.bmp",
+    "A:/workpace/pic/2.bmp",
+    "A:/workpace/pic/3.bmp",
+    "A:/workpace/pic/4.bmp",
+    "A:/workpace/pic/5.bmp",
     };
 
 static void pic_event_handle(lv_event_t* e)
@@ -27,7 +28,6 @@ static void pic_event_handle(lv_event_t* e)
     lv_obj_t* label_pic = lv_event_get_user_data(e);
     if(code==LV_EVENT_PRESSED)
     {
-        extern lv_obj_t* page_menu;
         lv_obj_add_flag(page_menu, LV_OBJ_FLAG_HIDDEN);
         album();
     }
@@ -41,7 +41,6 @@ void pic_icon(void)
         lv_obj_add_flag(page_pic, LV_OBJ_FLAG_HIDDEN);
     }
 
-    extern lv_obj_t* page_menu;
     lv_obj_t* btn_pic = lv_button_create(page_menu);
     lv_obj_set_size(btn_pic, 120, 120);
     lv_obj_align(btn_pic, LV_ALIGN_LEFT_MID,30,0);
@@ -49,7 +48,7 @@ void pic_icon(void)
     lv_obj_t* label_pic = lv_label_create(btn_pic);
     lv_label_set_text(label_pic, "相册");
     lv_obj_set_parent(label_pic, lv_obj_get_parent(btn_pic)); // 移到同一父容器
-    lv_obj_align_to(label_pic, btn_pic, LV_ALIGN_OUT_BOTTOM_MID, -15, 0);
+    lv_obj_align_to(label_pic, btn_pic, LV_ALIGN_OUT_BOTTOM_MID, -20, 0);
     // lv_obj_set_align(label_pic, LV_ALIGN_OUT_BOTTOM_MID);
 
     static lv_style_t style1;
@@ -85,12 +84,11 @@ static void pacture_event(lv_event_t* e)
 
     lv_image_set_src(image, pics[i]);
 
-    if(strcmp(str,"退回")==0)
-    {
-        extern lv_obj_t* page_menu;
-        lv_obj_add_flag(page_pic, LV_OBJ_FLAG_HIDDEN);
-        lv_obj_remove_flag(page_menu, LV_OBJ_FLAG_HIDDEN);
-    }
+    // if(strcmp(str,"退回")==0)
+    // {
+    //     lv_obj_add_flag(page_pic, LV_OBJ_FLAG_HIDDEN);
+    //     lv_obj_remove_flag(page_menu, LV_OBJ_FLAG_HIDDEN);
+    // }
 }
 
 // 相册
@@ -129,6 +127,7 @@ void album(void)
     lv_obj_add_style(label2, &style, LV_STATE_DEFAULT);
     lv_obj_add_event_cb(btn2,pacture_event, LV_EVENT_CLICKED, label2);
 
+    page_flag=-1;
     back_prev(page_pic);
 
     //在活动屏幕上创建一个图片控件 --- 静态控件

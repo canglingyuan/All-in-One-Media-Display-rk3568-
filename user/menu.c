@@ -13,14 +13,14 @@ int key_flag=0;
 int page_flag=0;
 
 // 中文样式
-void set_cn_font(lv_obj_t *label)
+void set_cn_font(lv_obj_t *label)   //默认
 {
     static lv_style_t s;
     lv_style_init(&s);
     lv_style_set_text_font(&s, &Ch_make);
     lv_obj_add_style(label, &s, LV_STATE_DEFAULT);
 }
-void set_cn_font_red(lv_obj_t *label)
+void set_cn_font_red(lv_obj_t *label)   //红色
 {
     static lv_style_t s;
     lv_style_init(&s);
@@ -28,9 +28,17 @@ void set_cn_font_red(lv_obj_t *label)
     lv_style_set_text_color(&s, lv_color_hex(0xFF0000));
     lv_obj_add_style(label, &s, LV_STATE_DEFAULT);
 }
+void set_cn_font_white(lv_obj_t *label) //白色
+{
+    static lv_style_t s;
+    lv_style_init(&s);
+    lv_style_set_text_font(&s, &Ch_make);
+    lv_style_set_text_color(&s, lv_color_hex(0xFFFFFF));
+    lv_obj_add_style(label, &s, LV_STATE_DEFAULT);
+}
 
 // 返回上一级
-void back_event(lv_obj_t* e)
+void back_event(lv_event_t* e)
 {
     lv_obj_t* label_back=lv_event_get_user_data(e);
     char* str=lv_label_get_text(label_back);
@@ -39,10 +47,17 @@ void back_event(lv_obj_t* e)
 
     if(strcmp(str,"退回")==0)
     {
-        lv_obj_add_flag(parent,LV_OBJ_FLAG_HIDDEN);
+        // lv_obj_add_flag(parent,LV_OBJ_FLAG_HIDDEN);
         if(page_flag==0)
         {
+            lv_obj_add_flag(parent,LV_OBJ_FLAG_HIDDEN);
             lv_obj_remove_flag(page_menu,LV_OBJ_FLAG_HIDDEN);
+        }
+        else if(page_flag==-1)
+        {
+            lv_obj_add_flag(parent,LV_OBJ_FLAG_HIDDEN);
+            lv_obj_remove_flag(page_menu,LV_OBJ_FLAG_HIDDEN);
+            lv_obj_delete(parent);
         }
     }
 }
@@ -56,6 +71,7 @@ void back_prev(lv_obj_t* parent)
     lv_obj_set_align(label_back, LV_ALIGN_CENTER);
     lv_label_set_text(label_back,"退回");
     set_cn_font_red(label_back);
+    lv_obj_move_foreground(label_back);
 
     lv_obj_add_event_cb(btn_back,back_event, LV_EVENT_CLICKED, label_back);
 }
@@ -109,7 +125,7 @@ void log_Init()
     lv_obj_add_flag(kb, LV_OBJ_FLAG_HIDDEN);
 
     log_image=lv_image_create(lv_screen_active());
-    lv_image_set_src(log_image,"A:/workpace/log_image.bmp");
+    lv_image_set_src(log_image,"A:/workpace/pic/log_image.bmp");
     lv_obj_set_align(log_image,LV_ALIGN_CENTER);
 
     lv_obj_t* log_ta=lv_textarea_create(log_image);
@@ -119,7 +135,7 @@ void log_Init()
     lv_textarea_set_placeholder_text(log_ta, "password:");
 
     page_menu=lv_image_create(lv_screen_active());
-    lv_image_set_src(page_menu,"A:/workpace/page_menu.bmp");
+    lv_image_set_src(page_menu,"A:/workpace/pic/page_menu.bmp");
     lv_obj_set_align(page_menu,LV_ALIGN_CENTER);
     lv_obj_add_flag(page_menu, LV_OBJ_FLAG_HIDDEN);
 }
@@ -161,7 +177,10 @@ void app_Init()
     // 闹钟时钟
     clock_icon();
     // 游戏
-    // 音乐播放器
+    // game_icon();
+    // 音频播放器
+    video_icon();
+
 }
 
 void desktop_Init()

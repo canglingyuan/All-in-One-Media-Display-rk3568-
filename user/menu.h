@@ -8,6 +8,7 @@ void desktop_Init(void);
 void app_Init(void);
 void set_cn_font(lv_obj_t *label);
 void set_cn_font_red(lv_obj_t *label);
+void set_cn_font_white(lv_obj_t *label);
 void back_event(lv_obj_t* e);
 void back_prev(lv_obj_t* parent);
 

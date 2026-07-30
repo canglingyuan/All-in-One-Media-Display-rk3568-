@@ -43,17 +43,6 @@ static lv_obj_t *cd_roller_min  = NULL;
 static lv_obj_t *cd_roller_sec  = NULL;
 
 
-
-/* 给 label 设置中文字体（Ch_make） */
-static void set_cn_font_white(lv_obj_t *label)
-{
-    static lv_style_t s;
-    lv_style_init(&s);
-    lv_style_set_text_font(&s, &Ch_make);
-    lv_style_set_text_color(&s, lv_color_hex(0xFFFFFF));
-    lv_obj_add_style(label, &s, LV_STATE_DEFAULT);
-}
-
 // 构建roller字符串
 static void build_options(char* buf,int max_val)
 {
