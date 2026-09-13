@@ -44,6 +44,7 @@ void back_event(lv_event_t* e)
     char* str=lv_label_get_text(label_back);
     lv_obj_t* btn_back=lv_event_get_target(e);
     lv_obj_t* parent=lv_obj_get_parent(btn_back);
+    lv_obj_t* grand=lv_obj_get_parent(parent);
 
     if(strcmp(str,"退回")==0)
     {
@@ -53,10 +54,16 @@ void back_event(lv_event_t* e)
             lv_obj_add_flag(parent,LV_OBJ_FLAG_HIDDEN);
             lv_obj_remove_flag(page_menu,LV_OBJ_FLAG_HIDDEN);
         }
+        // else if(page_flag==-1)
+        // {
+        //     lv_obj_add_flag(parent,LV_OBJ_FLAG_HIDDEN);
+        //     lv_obj_remove_flag(page_menu,LV_OBJ_FLAG_HIDDEN);
+        //     lv_obj_delete(parent);
+        // }
         else if(page_flag==-1)
         {
             lv_obj_add_flag(parent,LV_OBJ_FLAG_HIDDEN);
-            lv_obj_remove_flag(page_menu,LV_OBJ_FLAG_HIDDEN);
+            lv_obj_remove_flag(grand,LV_OBJ_FLAG_HIDDEN);
             lv_obj_delete(parent);
         }
     }

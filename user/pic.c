@@ -10,7 +10,7 @@ extern lv_obj_t* page_menu;
 static int i=0;
 static lv_obj_t * page_pic ;
 static lv_obj_t * image ;
-static int build_pic=0;
+static int build=0;
 #define IMG_MAX (sizeof(pics)/sizeof(pics[0]))
 
 char* pics[]= {
@@ -83,11 +83,11 @@ void album(void)
 * ========================================*/
 static void pic_event_handle(lv_event_t* e)
 {
-    build_pic=0;
-    if(!build_pic)
+    build=0;
+    if(!build)
     {
         album();
-        build_pic=1;
+        build=1;
     }
     lv_obj_add_flag(page_menu, LV_OBJ_FLAG_HIDDEN);
     lv_obj_remove_flag(page_pic, LV_OBJ_FLAG_HIDDEN);
